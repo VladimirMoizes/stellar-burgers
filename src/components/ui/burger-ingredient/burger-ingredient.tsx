@@ -9,10 +9,17 @@ import {
 } from '@zlden/react-developer-burger-ui-components';
 
 import { TBurgerIngredientUIProps } from './type';
+import { useDispatch } from 'react-redux';
+import { setCurrentIngredient } from '../../../services/slices/ingredientDetailsSlice';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
+    const dispatch = useDispatch();
+
+    const handleLinkClick = () => {
+      dispatch(setCurrentIngredient(ingredient));
+    };
 
     return (
       <li className={styles.container}>
@@ -20,6 +27,7 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
           className={styles.article}
           to={`/ingredients/${_id}`}
           state={locationState}
+          onClick={handleLinkClick}
         >
           {count && <Counter count={count} />}
           <img className={styles.img} src={image} alt='картинка ингредиента.' />

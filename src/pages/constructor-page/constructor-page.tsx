@@ -1,19 +1,32 @@
-import { useSelector } from '../../services/store';
+import { AppDispatch, useSelector } from '../../services/store';
 
 import styles from './constructor-page.module.css';
 
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  getIngredients,
+  getIngredientsSelector
+} from '../../services/slices/ingredientSlice';
 
 export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const { items, loading, error } = useSelector(getIngredientsSelector);
+  const dispatch = useDispatch<AppDispatch>();
+  const ingredients = items;
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
+
+  console.log(ingredients);
 
   return (
     <>
-      {isIngredientsLoading ? (
+      {loading ? (
         <Preloader />
       ) : (
         <main className={styles.containerMain}>
