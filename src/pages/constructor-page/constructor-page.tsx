@@ -16,13 +16,10 @@ export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
   const { items, loading, error } = useSelector(getIngredientsSelector);
   const dispatch = useDispatch<AppDispatch>();
-  const ingredients = items;
 
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
-
-  console.log(ingredients);
 
   return (
     <>

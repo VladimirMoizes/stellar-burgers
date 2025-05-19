@@ -19,22 +19,12 @@ import {
   Modal,
   OrderInfo
 } from '@components';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route';
-import { useDispatch } from 'react-redux';
-import { clearCurrentIngredient } from '../../services/slices/ingredientDetailsSlice';
 
 const App = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
-
-  // const background = location.state?.background;
-
-  // const handleModalClose = () => {
-  //   dispatch(clearCurrentIngredient());
-  //   navigate(background || '/');
-  // };
+  const { number } = useParams();
 
   return (
     <div className={styles.app}>
@@ -45,7 +35,12 @@ const App = () => {
           <Route
             path=':number'
             element={
-              <Modal title='' onClose={() => {}}>
+              <Modal
+                title={`#${number?.padStart(6, '0')}`}
+                onClose={() => {
+                  navigate(-2);
+                }}
+              >
                 <OrderInfo />
               </Modal>
             }
@@ -55,7 +50,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -63,35 +58,22 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
         />
-        <Route
-          path='/forgot-password'
-          element={
-            <ProtectedRoute>
-              <ForgotPassword />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/reset-password'
-          element={
-            <ProtectedRoute>
-              <ResetPassword />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/profile'
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        >
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
+        <Route path='/profile'>
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           <Route path='orders' element={<ProfileOrders />}>
             <Route
               path=':number'

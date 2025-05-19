@@ -24,7 +24,6 @@ export const IngredientsCategory = forwardRef<
   const ingredientsCounters = useMemo(() => {
     const counters: Record<string, number> = {};
 
-    // Безопасный перебор ингредиентов
     constructorIngredients.forEach((ingredient) => {
       counters[ingredient._id] = (counters[ingredient._id] || 0) + 1;
     });

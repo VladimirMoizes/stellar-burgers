@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient, TConstructorIngredient } from '../../utils/types';
-import { RootState } from '../store';
 
 type ConstructorState = {
   bun: TIngredient | null;

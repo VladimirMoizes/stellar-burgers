@@ -11,11 +11,12 @@ import {
 import { TBurgerIngredientUIProps } from './type';
 import { useDispatch } from 'react-redux';
 import { setCurrentIngredient } from '../../../services/slices/ingredientDetailsSlice';
+import { AppDispatch } from 'src/services/store';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleLinkClick = () => {
       dispatch(setCurrentIngredient(ingredient));

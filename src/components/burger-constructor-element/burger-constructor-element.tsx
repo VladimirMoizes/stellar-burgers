@@ -7,12 +7,10 @@ import {
   moveIngredient,
   removeIngredient
 } from '../../services/slices/constructorSlice';
-import { useLocation } from 'react-router-dom';
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
     const dispatch = useDispatch<AppDispatch>();
-    const location = useLocation();
     const handleMoveDown = () => {
       dispatch(moveIngredient({ fromIndex: index, toIndex: index + 1 }));
     };
