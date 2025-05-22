@@ -8,6 +8,7 @@ type TOrderState = {
   orders: Array<TOrder>;
   total: number;
   totalToday: number;
+  isRequest: boolean;
 };
 
 const initialState: TOrderState = {
@@ -15,7 +16,8 @@ const initialState: TOrderState = {
   name: '',
   orders: [],
   total: 0,
-  totalToday: 0
+  totalToday: 0,
+  isRequest: false
 };
 
 export const orderBurger = createAsyncThunk(
@@ -34,14 +36,36 @@ export const getOrders = createAsyncThunk('orders/getAll', async () => {
 export const ordersSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {},
+  reducers: {
+    closeOrder: (state) => {
+      state.order = null;
+      state.name = '';
+      state.isRequest = false;
+    }
+  },
   selectors: { getOrdersSelectors: (state) => state },
   extraReducers: (builder) => {
-    builder.addCase(orderBurger.fulfilled, (state, action) => {
-      state.order = action.payload.order;
-      state.name = action.payload.name;
-    });
+    builder
+      .addCase(orderBurger.fulfilled, (state, action) => {
+        state.order = action.payload.order;
+        state.name = action.payload.name;
+        state.isRequest = false;
+      })
+      .addCase(orderBurger.pending, (state) => {
+        state.isRequest = true;
+      })
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.orders = action.payload;
+        state.isRequest = false;
+      })
+      .addCase(getOrders.pending, (state) => {
+        state.isRequest = true;
+      })
+      .addCase(getOrders.rejected, (state) => {
+        state.isRequest = false;
+      });
   }
 });
 
 export const { getOrdersSelectors } = ordersSlice.selectors;
+export const { closeOrder } = ordersSlice.actions;

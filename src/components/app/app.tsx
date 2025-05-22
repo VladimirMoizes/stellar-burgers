@@ -19,34 +19,49 @@ import {
   Modal,
   OrderInfo
 } from '@components';
-import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useParams
+} from 'react-router-dom';
 import { ProtectedRoute } from '../protected-route';
+import { useEffect } from 'react';
+import { checkUserAuth } from '../../services/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../services/store';
+import {
+  getIngredients,
+  getIngredientsSelector
+} from '../../services/slices/ingredientSlice';
 
 const App = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
+  const background = location.state?.background;
   const navigate = useNavigate();
-  const { number } = useParams();
+
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, [dispatch]);
+
+  const { items } = useSelector(getIngredientsSelector);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      dispatch(getIngredients());
+    }
+  }, [dispatch, items.length]);
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
-        <Route path='/feed' element={<Feed />}>
-          <Route
-            path=':number'
-            element={
-              <Modal
-                title={`#${number?.padStart(6, '0')}`}
-                onClose={() => {
-                  navigate(-2);
-                }}
-              >
-                <OrderInfo />
-              </Modal>
-            }
-          />
-        </Route>
-
+        <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route
           path='/login'
           element={
@@ -65,42 +80,79 @@ const App = () => {
         />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/profile'>
-          <Route
-            index
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route path='orders' element={<ProfileOrders />}>
-            <Route
-              path=':number'
-              element={
-                <Modal title='' onClose={() => {}}>
-                  <OrderInfo />
-                </Modal>
-              }
-            />
-          </Route>
-        </Route>
-        <Route path='*' element={<NotFound404 />} />
-
         <Route
-          path='/ingredients/:id'
+          path='/profile'
           element={
-            <Modal
-              title='Детали ингредиента'
-              onClose={() => {
-                navigate('/');
-              }}
-            >
-              <IngredientDetails />
-            </Modal>
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
           }
         />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='*' element={<NotFound404 />} />
       </Routes>
+
+      {background && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={(() => {
+              const FeedWithParams = () => {
+                const { number } = useParams<{ number: string }>();
+                return (
+                  <Modal
+                    title={`#${number?.padStart(6, '0')}`}
+                    onClose={() => navigate(-1)}
+                  >
+                    <OrderInfo />
+                  </Modal>
+                );
+              };
+              return <FeedWithParams />;
+            })()}
+          />
+          <Route
+            path='/profile/orders/:number'
+            element={(() => {
+              const ProfileOrdersWithParams = () => {
+                const { number } = useParams<{ number: string }>();
+                return (
+                  <Modal
+                    title={`#${number?.padStart(6, '0')}`}
+                    onClose={() => navigate(-1)}
+                  >
+                    <OrderInfo />
+                  </Modal>
+                );
+              };
+              return <ProfileOrdersWithParams />;
+            })()}
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };

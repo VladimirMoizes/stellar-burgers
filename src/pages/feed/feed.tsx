@@ -4,22 +4,24 @@ import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFeeds, getFeedsSelectors } from '../../services/slices/feedSlice';
-import { AppDispatch } from '../../services/store';
+import { AppDispatch, RootState } from '../../services/store';
 import { Outlet, useLocation } from 'react-router-dom';
 import { getOrders } from '../../services/slices/ordersSlice';
+import { getUser, getUserSelectors } from '../../services/slices/userSlice';
 
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
   const dispatch = useDispatch<AppDispatch>();
-  const orders: TOrder[] = useSelector(getFeedsSelectors).orders;
+  /** TODO: взять переменную из стора */
+  const { orders, isLoaded } = useSelector(getFeedsSelectors);
 
   const location = useLocation();
   const background = location.state?.background;
 
   useEffect(() => {
-    dispatch(getFeeds());
-    dispatch(getOrders());
-  }, [dispatch]);
+    if (!isLoaded) {
+      dispatch(getFeeds());
+    }
+  }, [dispatch, isLoaded]);
 
   const handleGetFeeds = () => {
     dispatch(getFeeds());

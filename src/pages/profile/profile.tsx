@@ -31,12 +31,12 @@ export const Profile: FC = () => {
     formValue.password !== '';
 
   const handleSubmit = (e: SyntheticEvent) => {
-    console.log(
-      'accessToken:',
-      getCookie('accessToken'),
-      'refreshToken:',
-      localStorage.getItem('refreshToken')
-    );
+    // console.log(
+    //   'accessToken:',
+    //   getCookie('accessToken'),
+    //   'refreshToken:',
+    //   localStorage.getItem('refreshToken')
+    // );
     e.preventDefault();
     if (user) {
       dispatch(

@@ -44,6 +44,8 @@ export const loginUser = createAsyncThunk(
   'user/loginUser',
   async ({ email, password }: TLoginData) => {
     const response = await loginUserApi({ email, password });
+    localStorage.setItem('refreshToken', response.refreshToken);
+    setCookie('accessToken', response.accessToken);
     return response.user;
   }
 );
@@ -52,6 +54,8 @@ export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (data: TRegisterData) => {
     const response = await registerUserApi(data);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    setCookie('accessToken', response.accessToken);
     return response.user;
   }
 );
@@ -71,6 +75,8 @@ export const updateUser = createAsyncThunk(
 
 export const logout = createAsyncThunk('user/logout', async () => {
   await logoutApi();
+  localStorage.removeItem('refreshToken');
+  setCookie('accessToken', '', { expires: -1 });
 });
 
 export const resetPassword = createAsyncThunk(
@@ -161,7 +167,7 @@ export const userSlice = createSlice({
         state.data = action.payload;
       })
 
-      // Сброс (обновление пароля)
+      // Сброс (обновление) пароля
       .addCase(resetPassword.pending, (state) => {
         state.resetPasswordRequest = true;
         state.resetPasswordError = null;

@@ -11,12 +11,13 @@ import { OrderCardUIProps } from './type';
 import { OrderStatus } from '@components';
 
 export const OrderCardUI: FC<OrderCardUIProps> = memo(
-  ({ orderInfo, maxIngredients, locationState }) => (
+  ({ orderInfo, maxIngredients, locationState, onClick }) => (
     <Link
       to={orderInfo.number.toString()}
       relative='path'
       state={locationState}
       className={`p-6 mb-4 mr-2 ${styles.order}`}
+      onClick={onClick}
     >
       <div className={styles.order_info}>
         <span className={`text text_type_digits-default ${styles.number}`}>
@@ -35,32 +36,31 @@ export const OrderCardUI: FC<OrderCardUIProps> = memo(
       <div className={`pt-6 ${styles.order_content}`}>
         <ul className={styles.ingredients}>
           {orderInfo.ingredientsToShow.map((ingredient, index) => {
-            let zIndex = maxIngredients - index;
-            let right = 20 * index;
+            const zIndex = maxIngredients - index;
+            const right = 20 * index;
+            const isLastVisible = maxIngredients === index + 1;
+
             return (
               <li
                 className={styles.img_wrap}
-                style={{ zIndex: zIndex, right: right }}
+                style={{ zIndex, right }}
                 key={index}
               >
                 <img
-                  style={{
-                    opacity:
-                      orderInfo.remains && maxIngredients === index + 1
-                        ? '0.5'
-                        : '1'
-                  }}
                   className={styles.img}
                   src={ingredient.image_mobile}
                   alt={ingredient.name}
+                  style={{
+                    opacity: orderInfo.remains && isLastVisible ? '0.5' : '1'
+                  }}
                 />
-                {maxIngredients === index + 1 ? (
+                {isLastVisible && orderInfo.remains > 0 && (
                   <span
                     className={`text text_type_digits-default ${styles.remains}`}
                   >
-                    {orderInfo.remains > 0 ? `+${orderInfo.remains}` : null}
+                    +{orderInfo.remains}
                   </span>
-                ) : null}
+                )}
               </li>
             );
           })}

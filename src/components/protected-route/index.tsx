@@ -15,10 +15,9 @@ export const ProtectedRoute = ({
   const { isAuthChecked, isAuthenticated } = useSelector(getUserSelectors);
   const location = useLocation();
 
-  // Почему-то вечный прелоадер
-  // if (!isAuthChecked) {
-  //   return <Preloader />;
-  // }
+  if (!isAuthChecked) {
+    return <Preloader />;
+  }
 
   if (onlyUnAuth && isAuthenticated) {
     const from = location.state?.from || { pathname: '/' };

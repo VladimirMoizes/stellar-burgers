@@ -2,34 +2,33 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectConstructor } from '../../services/slices/constructorSlice';
-import { AppDispatch, RootState } from 'src/services/store';
+import constructorSlice, {
+  clearConstructor,
+  selectConstructor
+} from '../../services/slices/constructorSlice';
+import { AppDispatch, RootState } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import {
+  closeOrder,
   getOrdersSelectors,
   orderBurger
 } from '../../services/slices/ordersSlice';
+import { getUserSelectors } from '../../services/slices/userSlice';
 
 export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  // const newOrder = useSelector(getOrdersSelectors).order;
+  const user = useSelector(getUserSelectors).data;
 
   const bun = useSelector(selectConstructor).bun;
   const ingredients = useSelector(selectConstructor).ingredients;
-  const orderRequest = false;
-  const orderModalData = null;
+  const orderRequest = useSelector(getOrdersSelectors).isRequest;
+  const orderModalData = useSelector(getOrdersSelectors).order;
 
   const constructorItems = {
     bun: bun || null,
     ingredients: ingredients || []
   };
-
-  const ingredientIds = [
-    bun?._id,
-    ...ingredients.map((item) => item._id),
-    bun?._id
-  ];
 
   const price = useMemo(() => {
     const bunPrice = bun ? bun.price * 2 : 0;
@@ -47,13 +46,17 @@ export const BurgerConstructor: FC = () => {
       bun._id
     ];
 
-    dispatch(orderBurger(ingredientIds)).then(() => {
-      navigate('/profile/orders');
-    });
+    if (user) {
+      dispatch(orderBurger(ingredientIds));
+      dispatch(clearConstructor());
+    } else {
+      navigate('/login');
+    }
   };
 
   const closeOrderModal = () => {
     // Логика закрытия модального окна
+    dispatch(closeOrder());
   };
 
   return (

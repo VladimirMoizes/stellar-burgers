@@ -5,8 +5,7 @@ import styles from './constructor-page.module.css';
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
-import { FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC } from 'react';
 import {
   getIngredients,
   getIngredientsSelector
@@ -15,11 +14,15 @@ import {
 export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
   const { items, loading, error } = useSelector(getIngredientsSelector);
-  const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
+  // Перенёс в App.tsx, чтобы при обновлении страницы на другой вкладке сразу загружались ингредиенты
+  // const dispatch = useDispatch<AppDispatch>();
+
+  // useEffect(() => {
+  //   if (items.length === 0) {
+  //     dispatch(getIngredients());
+  //   }
+  // }, [dispatch, items.length]);
 
   return (
     <>

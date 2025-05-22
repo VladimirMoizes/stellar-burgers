@@ -9,11 +9,9 @@ import { getIngredientsSelector } from '../../services/slices/ingredientSlice';
 
 const maxIngredients = 6;
 
-export const OrderCard: FC<OrderCardProps> = memo(({ order, onClick }) => {
+export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
-  /** TODO: взять переменную из стора */
   const ingredients: TIngredient[] = useSelector(getIngredientsSelector).items;
 
   const orderInfo = useMemo(() => {
@@ -29,15 +27,10 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order, onClick }) => {
     );
 
     const total = ingredientsInfo.reduce((acc, item) => acc + item.price, 0);
-
     const ingredientsToShow = ingredientsInfo.slice(0, maxIngredients);
-
-    const remains =
-      ingredientsInfo.length > maxIngredients
-        ? ingredientsInfo.length - maxIngredients
-        : 0;
-
+    const remains = Math.max(0, ingredientsInfo.length - maxIngredients);
     const date = new Date(order.createdAt);
+
     return {
       ...order,
       ingredientsInfo,
@@ -48,21 +41,13 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order, onClick }) => {
     };
   }, [order, ingredients]);
 
-  const handleClick = (e: React.MouseEvent) => {
-    navigate(`/feed/${order.number}`, {
-      state: { background: location }
-    });
-  };
-
   if (!orderInfo) return null;
 
   return (
-    <div onClick={handleClick}>
-      <OrderCardUI
-        orderInfo={orderInfo}
-        maxIngredients={maxIngredients}
-        locationState={{ background: location }}
-      />
-    </div>
+    <OrderCardUI
+      orderInfo={orderInfo}
+      maxIngredients={maxIngredients}
+      locationState={{ background: location }}
+    />
   );
 });
