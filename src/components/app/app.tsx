@@ -12,13 +12,7 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import {
-  AppHeader,
-  BurgerConstructor,
-  IngredientDetails,
-  Modal,
-  OrderInfo
-} from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
   Route,
   Routes,
@@ -29,24 +23,23 @@ import {
 import { ProtectedRoute } from '../protected-route';
 import { useEffect } from 'react';
 import { checkUserAuth } from '../../services/slices/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   getIngredients,
   getIngredientsSelector
 } from '../../services/slices/ingredientSlice';
 
 const App = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
   const navigate = useNavigate();
 
+  const { items } = useSelector(getIngredientsSelector);
+
   useEffect(() => {
     dispatch(checkUserAuth());
   }, [dispatch]);
-
-  const { items } = useSelector(getIngredientsSelector);
 
   useEffect(() => {
     if (items.length === 0) {
@@ -140,7 +133,11 @@ const App = () => {
                   </Modal>
                 );
               };
-              return <ProfileOrdersWithParams />;
+              return (
+                <ProtectedRoute>
+                  <ProfileOrdersWithParams />
+                </ProtectedRoute>
+              );
             })()}
           />
           <Route

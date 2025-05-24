@@ -11,6 +11,7 @@ import { ingredientDetailsSlice } from './slices/ingredientDetailsSlice';
 import { feedsSlice } from './slices/feedSlice';
 import { userSlice } from './slices/userSlice';
 import { ordersSlice } from './slices/ordersSlice';
+import { orderByNumberSlice } from './slices/orderByNumberSlice';
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsSlice.reducer,
@@ -18,7 +19,8 @@ export const rootReducer = combineReducers({
   ingredientDetails: ingredientDetailsSlice.reducer,
   feeds: feedsSlice.reducer,
   user: userSlice.reducer,
-  orders: ordersSlice.reducer
+  orders: ordersSlice.reducer,
+  orderByNumber: orderByNumberSlice.reducer
 });
 
 const store = configureStore({

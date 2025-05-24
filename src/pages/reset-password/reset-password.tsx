@@ -1,15 +1,13 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from '../../services/store';
 import { ResetPasswordUI } from '@ui-pages';
 import { resetPassword } from '../../services/slices/userSlice';
 import { getUserSelectors } from '../../services/slices/userSlice';
-import { AppDispatch } from '../../services/store';
 
 export const ResetPassword: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
   const { resetPasswordRequest, resetPasswordError } =
     useSelector(getUserSelectors);
 

@@ -25,14 +25,6 @@ export const getFeeds = createAsyncThunk('feeds/getAll', async () => {
   return response;
 });
 
-export const fetchOrderByNumber = createAsyncThunk(
-  'feeds/fetchByNumber',
-  async (orderNumber: number) => {
-    const response = await getOrderByNumberApi(orderNumber);
-    return response;
-  }
-);
-
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
@@ -57,18 +49,6 @@ export const feedsSlice = createSlice({
         state.isLoaded = true;
       })
       .addCase(getFeeds.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(fetchOrderByNumber.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(fetchOrderByNumber.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
