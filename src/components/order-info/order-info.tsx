@@ -11,7 +11,6 @@ import {
 } from '../../services/slices/orderByNumberSlice';
 
 export const OrderInfo: FC = () => {
-  console.log('Монтирование OrderInfo');
   const dispatch = useDispatch();
   const { number } = useParams<{ number: string }>();
 

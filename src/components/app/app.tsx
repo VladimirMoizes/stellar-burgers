@@ -32,8 +32,8 @@ import {
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const background = location.state?.background;
   const navigate = useNavigate();
+  const background = location.state?.background;
 
   const { items } = useSelector(getIngredientsSelector);
 
@@ -47,9 +47,12 @@ const App = () => {
     }
   }, [dispatch, items.length]);
 
+  const pathname = location.pathname;
+
   return (
     <div className={styles.app}>
       <AppHeader />
+
       <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
@@ -100,7 +103,10 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {background && (
+      {(background ||
+        pathname.startsWith('/feed/') ||
+        pathname.startsWith('/profile/orders/') ||
+        pathname.startsWith('/ingredients/')) && (
         <Routes>
           <Route
             path='/feed/:number'
