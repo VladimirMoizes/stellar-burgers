@@ -32,6 +32,9 @@ export const orderByNumberSlice = createSlice({
       state.error = null;
     }
   },
+  selectors: {
+    getOrderSelector: (state) => state.order
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrderByNumber.pending, (state) => {
@@ -50,3 +53,4 @@ export const orderByNumberSlice = createSlice({
 });
 
 export const { clearOrder } = orderByNumberSlice.actions;
+export const { getOrderSelector } = orderByNumberSlice.selectors;

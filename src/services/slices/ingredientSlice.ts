@@ -22,7 +22,10 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  selectors: { getIngredientsSelector: (state) => state },
+  selectors: {
+    getIngredientsSelector: (state) => state,
+    getIngredientsItemsSelector: (state) => state.items
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
@@ -41,4 +44,5 @@ export const ingredientsSlice = createSlice({
   }
 });
 
-export const { getIngredientsSelector } = ingredientsSlice.selectors;
+export const { getIngredientsSelector, getIngredientsItemsSelector } =
+  ingredientsSlice.selectors;

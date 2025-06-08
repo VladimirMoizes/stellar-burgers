@@ -126,7 +126,6 @@ export const userSlice = createSlice({
         state.data = action.payload;
         state.loginUserRequest = false;
         state.isAuthenticated = true;
-        state.isAuthChecked = true;
       })
 
       // Регистрация
@@ -142,7 +141,6 @@ export const userSlice = createSlice({
         state.data = action.payload;
         state.registerUserRequest = false;
         state.isAuthenticated = true;
-        state.isAuthChecked = true;
       })
 
       // Получение данных пользователя
@@ -153,13 +151,11 @@ export const userSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.getUserRequest = false;
         state.getUserError = action.error.message || 'Ошибка получения данных';
-        state.isAuthChecked = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.data = action.payload;
         state.getUserRequest = false;
         state.isAuthenticated = true;
-        state.isAuthChecked = true;
       })
 
       // Обновление данных
@@ -185,11 +181,6 @@ export const userSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.data = null;
         state.isAuthenticated = false;
-      })
-
-      // Проверка авторизации
-      .addCase(checkUserAuth.fulfilled, (state) => {
-        state.isAuthChecked = true;
       });
   }
 });

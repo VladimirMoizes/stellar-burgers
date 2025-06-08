@@ -103,10 +103,7 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {(background ||
-        pathname.startsWith('/feed/') ||
-        pathname.startsWith('/profile/orders/') ||
-        pathname.startsWith('/ingredients/')) && (
+      {background && (
         <Routes>
           <Route
             path='/feed/:number'

@@ -4,23 +4,26 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../services/store';
-import { getIngredientsSelector } from '../../services/slices/ingredientSlice';
+import { getIngredientsItemsSelector } from '../../services/slices/ingredientSlice';
 import {
   clearOrder,
-  fetchOrderByNumber
+  fetchOrderByNumber,
+  getOrderSelector
 } from '../../services/slices/orderByNumberSlice';
+import { getOrderSelectorById } from '@selectors';
 
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
   const { number } = useParams<{ number: string }>();
+  console.log('render OrderInfo');
 
   /** TODO: взять переменные orderData и ingredients из стора */
-  const ingredients: TIngredient[] = useSelector(getIngredientsSelector).items;
+  const ingredients: TIngredient[] = useSelector(getIngredientsItemsSelector);
 
-  const { order: orderData } = useSelector((state) => state.orderByNumber);
+  const orderData = useSelector(getOrderSelectorById(Number(number)));
 
   useEffect(() => {
-    if (number) {
+    if (!orderData) {
       dispatch(fetchOrderByNumber(Number(number)));
     }
     return () => {
