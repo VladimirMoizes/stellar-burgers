@@ -12,15 +12,6 @@ export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
   const { items, loading, error } = useSelector(getIngredientsSelector);
 
-  // Перенёс в App.tsx, чтобы при обновлении страницы на другой вкладке сразу загружались ингредиенты
-  // const dispatch = useDispatch<AppDispatch>();
-
-  // useEffect(() => {
-  //   if (items.length === 0) {
-  //     dispatch(getIngredients());
-  //   }
-  // }, [dispatch, items.length]);
-
   return (
     <>
       {loading ? (

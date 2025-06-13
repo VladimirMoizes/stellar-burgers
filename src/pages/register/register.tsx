@@ -1,7 +1,6 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
-import { AppDispatch } from '../../services/store';
 import {
   getUserSelectors,
   registerUser

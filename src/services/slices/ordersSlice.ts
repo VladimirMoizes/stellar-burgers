@@ -69,3 +69,5 @@ export const ordersSlice = createSlice({
 
 export const { getOrdersSelectors } = ordersSlice.selectors;
 export const { closeOrder } = ordersSlice.actions;
+
+export default ordersSlice.reducer;
