@@ -1,0 +1,29 @@
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "60d3b41abdacab0026a733c6",
+      "name": "Краторная булка N-200i",
+      "type": "bun",
+      "price": 1255,
+      "image": "https://code.s3.yandex.net/react/code/bun-02.png",
+      "image_large": "https://code.s3.yandex.net/react/code/bun-02-large.png"
+    },
+    {
+      "_id": "643d69a5c3f7b9001cfa0944",
+      "name": "Соус традиционный галактический",
+      "type": "sauce",
+      "price": 15,
+      "image": "https://code.s3.yandex.net/react/code/sauce-03.png",
+      "image_large": "https://code.s3.yandex.net/react/code/sauce-03-large.png"
+    },
+    {
+      "_id": "60d3b41abdacab0026a733c8",
+      "name": "Филе Люминесцентного тетраодонтимформа",
+      "type": "main",
+      "price": 988,
+      "image": "https://code.s3.yandex.net/react/code/meat-03.png",
+      "image_large": "https://code.s3.yandex.net/react/code/meat-03-large.png"
+    }
+  ]
+}
